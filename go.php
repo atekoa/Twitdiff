@@ -36,8 +36,11 @@ $count_diff = $count_followers - $yesterday_count;
 $email_body .= "Difference to yesterday: {$count_diff}\n\n";
 
 // The Twitter API only lets you get info for 100 users at once. so chunk into that size. 
+// if this_id is too big causes overflow
+$j=0;
 foreach ($followers->ids as $this_id) {
-    $user_array[$this_id] = $this_id;
+    $user_array[$j] = $this_id;
+    $j++;
 }
 $chunks = array_chunk($user_array, 100, true);
 $num_chunks = count($chunks);
@@ -92,8 +95,10 @@ function tryChunk(array $chunk) {
     return $json;
 }
 
+$k=0;
 foreach($all_data as $this_user) {
-    $user_data[$this_user->id] = $this_user;
+    $user_data[$k] = $this_user;
+    $k++;
 }
 ksort($user_data);
 // By this point we now have an array called $user_data with the current followers and their data. 
